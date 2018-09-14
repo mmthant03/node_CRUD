@@ -1,0 +1,21 @@
+{
+  "name": "a3-fullstack",
+  "version": "1.0.0",
+  "description": "Assignment 3 - Full Stack: Basic Database-enabled Web Application using HTML/CSS/JS and Node.js   ===",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmthant03/a3-fullstack.git"
+  },
+  "keywords": [],
+  "author": "mmthant",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmthant03/a3-fullstack/issues"
+  },
+  "homepage": "https://github.com/mmthant03/a3-fullstack#readme"
+}
