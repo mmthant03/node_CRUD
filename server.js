@@ -28,6 +28,9 @@ var server = http.createServer(function (req, res) {
         case '/index.html':
             sendFile(res, 'public/index.html');
             break;
+        case '/style.css':
+            sendFile(res, 'public/css/style.css');
+            break;
         case '/create':
             createData(req, res);
             break;

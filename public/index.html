@@ -1,19 +1,31 @@
-<form>
-    <input id="id" type="text" readonly="readonly">
-    <input id="name" type="text">
-    <input id="country" type="text">
-    <button id="save">Save</button>
-    <button id="update">Update</button>
+<html lang="en">
 
-</form>
+<head>
+    <title>All the Beautiful Places in the Earth!</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/style.css" />
 
-<div id="result">
-    <table id="places">
-        <tr>ID</tr>
-        <tr>Destination</tr>
-        <tr>Country</tr>
-    </table>
-</div>
+</head>
+
+<body>
+    <form>
+        <input id="id" type="text" readonly="readonly">
+        <input id="name" type="text">
+        <input id="country" type="text">
+        <button id="save">Save</button>
+        <button id="update">Update</button>
+
+    </form>
+
+    <div id="result">
+        <table id="places">
+            <th>ID</th>
+            <th>Destination</th>
+            <th>Country</th>
+        </table>
+    </div>
+
+</body>
 
 <script>
     let places = [];
@@ -26,7 +38,7 @@
         create(destination);
     })
 
-    document.getElementById("update").addEventListener("click", function(evt) {
+    document.getElementById("update").addEventListener("click", function (evt) {
         var destination = {};
         destination.id = document.getElementById("id").value;
         destination.name = document.getElementById("name").value;
@@ -46,7 +58,7 @@
     }
 
     function read() {
-        
+
         var request = new XMLHttpRequest();
         request.open('GET', '/read');
         request.responseType = 'json';
@@ -71,7 +83,7 @@
             idCell.innerHTML = place.id;
             nameCell.innerHTML = place.name;
             countryCell.innerHTML = place.country;
-            
+
             var editBtn = document.createElement("BUTTON");
             editBtn.setAttribute("id", "edit_" + place.id);
             editBtn.setAttribute("onclick", "setText('" + place.id + "')");
@@ -80,7 +92,7 @@
 
             var deleteBtn = document.createElement("BUTTON");
             deleteBtn.setAttribute("id", "delete_" + place.id);
-            deleteBtn.addEventListener("click", function(evt) {
+            deleteBtn.addEventListener("click", function (evt) {
                 warn(place.id);
                 // remove(place.id);
             })
@@ -91,7 +103,7 @@
     }
 
     function setText(id) {
-        var place_current = places.filter(function(d) {
+        var place_current = places.filter(function (d) {
             return d.id === id;
         })[0];
         document.getElementById("id").value = place_current.id;
@@ -112,7 +124,7 @@
 
     function warn(id) {
         var isDelete = confirm("Are you sure you want to delete?");
-        switch ( isDelete ) {
+        switch (isDelete) {
             case true:
                 remove(id);
                 location.reload();
@@ -123,7 +135,7 @@
     }
 
     function remove(id) {
-        var place_current = places.filter(function(d) {
+        var place_current = places.filter(function (d) {
             return d.id === id;
         })[0];
         var request = new XMLHttpRequest();
@@ -137,3 +149,5 @@
 
 
 </script>
+
+</html>
