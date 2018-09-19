@@ -1,0 +1,139 @@
+<form>
+    <input id="id" type="text" readonly="readonly">
+    <input id="name" type="text">
+    <input id="country" type="text">
+    <button id="save">Save</button>
+    <button id="update">Update</button>
+
+</form>
+
+<div id="result">
+    <table id="places">
+        <tr>ID</tr>
+        <tr>Destination</tr>
+        <tr>Country</tr>
+    </table>
+</div>
+
+<script>
+    let places = [];
+    read();
+
+    document.getElementById("save").addEventListener("click", function (evt) {
+        var destination = {};
+        destination.name = document.getElementById("name").value;
+        destination.country = document.getElementById("country").value;
+        create(destination);
+    })
+
+    document.getElementById("update").addEventListener("click", function(evt) {
+        var destination = {};
+        destination.id = document.getElementById("id").value;
+        destination.name = document.getElementById("name").value;
+        destination.country = document.getElementById("country").value;
+        update(destination);
+    })
+
+    function create(destn) {
+        var request = new XMLHttpRequest();
+        request.open('PUT', '/create');
+        request.responseType = 'text';
+        request.onload = function () {
+            console.log("Creating Data Done!");
+            read();
+        }
+        request.send(JSON.stringify(destn));
+    }
+
+    function read() {
+        
+        var request = new XMLHttpRequest();
+        request.open('GET', '/read');
+        request.responseType = 'json';
+        request.onload = function () {
+            places = request.response;
+            build(places);
+        }
+        request.send();
+    }
+
+    function build(places) {
+        var table = document.getElementById("places");
+
+        places.map(place => {
+            var row = table.insertRow();
+            var idCell = row.insertCell(0);
+            var nameCell = row.insertCell(1);
+            var countryCell = row.insertCell(2);
+            var editCell = row.insertCell(3);
+            var deleteCell = row.insertCell(4);
+
+            idCell.innerHTML = place.id;
+            nameCell.innerHTML = place.name;
+            countryCell.innerHTML = place.country;
+            
+            var editBtn = document.createElement("BUTTON");
+            editBtn.setAttribute("id", "edit_" + place.id);
+            editBtn.setAttribute("onclick", "setText('" + place.id + "')");
+            editBtn.innerHTML = "Edit";
+            editCell.appendChild(editBtn);
+
+            var deleteBtn = document.createElement("BUTTON");
+            deleteBtn.setAttribute("id", "delete_" + place.id);
+            deleteBtn.addEventListener("click", function(evt) {
+                warn(place.id);
+                // remove(place.id);
+            })
+            deleteBtn.innerHTML = "Delete";
+            deleteCell.appendChild(deleteBtn);
+
+        });
+    }
+
+    function setText(id) {
+        var place_current = places.filter(function(d) {
+            return d.id === id;
+        })[0];
+        document.getElementById("id").value = place_current.id;
+        document.getElementById("name").value = place_current.name;
+        document.getElementById("country").value = place_current.country;
+    }
+
+    function update(destn) {
+        var request = new XMLHttpRequest();
+        request.open('PUT', '/update');
+        request.responseType = 'text';
+        request.onload = function () {
+            console.log("Updating Done");
+            read();
+        }
+        request.send(JSON.stringify(destn));
+    }
+
+    function warn(id) {
+        var isDelete = confirm("Are you sure you want to delete?");
+        switch ( isDelete ) {
+            case true:
+                remove(id);
+                location.reload();
+                break;
+            default:
+                location.reload();
+        }
+    }
+
+    function remove(id) {
+        var place_current = places.filter(function(d) {
+            return d.id === id;
+        })[0];
+        var request = new XMLHttpRequest();
+        request.open('PUT', '/delete');
+        request.responseType = 'text';
+        request.onload = function () {
+            console.log("Deleting Done");
+        }
+        request.send(JSON.stringify(place_current));
+    }
+
+
+</script>
