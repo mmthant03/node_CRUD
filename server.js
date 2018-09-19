@@ -27,6 +27,14 @@ var server = http.createServer(function (req, res) {
         case '/index.html':
             sendFile(res, 'public/index.html');
             break;
+        case '/create':
+
+        case '/read':
+
+        case '/update':
+
+        case '/delete':
+
         default:
             res.end('404 not found')
     }
@@ -51,5 +59,8 @@ function sendFile(res, filename, contentType) {
 
 }
 
+function createData(req, res) {
+    
+}
 
 
