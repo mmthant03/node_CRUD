@@ -1,13 +1,103 @@
 
 .divContainer {
-    border: 1px solid;
-    background-image: url('/bagan.jpg');
-    height: 275px;
-    width: 100%;
+    background-image: url('/GrandCanyon.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50px;
+    width: fluid;
+    padding: 150px;
+    text-align: center;
+    margin:0;
+}
+
+.divleft {
+    position: relative;
+    top: 0px;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    background: white;
+    background-size: 50px 50px;
+}
+
+.divright {
+    position: relative;
+    top: 0px;
+    height: 600px;
+    width: 450px;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    background: white;
+    background-size: 50px 50px;
+}
+
+.divrightmost {
+    position: relative;
+    top: 0px;
+    height: 600px;
+    width: fluid;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    background: white;
+    background-size: 50px 50px;
+}
+.inputText {
+    margin: 0;
+    padding: 12px 5px;
+    transition: box-shadow;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.smallInput {
+    margin: 0;
+    padding: 5px 3px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+.buttonText {
+    width: 75px;
+    margin: 0;
+    padding: 12px 5px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+h3 {
+    font-family: Helvetica-neue;
+}
+
+h4 {
+    font-family: Baskerville;
 }
 
 th, td {
     width: 20px;
     padding : 8px;
     text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    float: left;
+    width: 480px;
+}
+
+th {
+    background-color: white;
+}
+
+tr:nth-child(even) {
+    background-color: aquamarine;
+}
+
+tr:nth-child(odd) {
+    background-color: aqua;
+}
+
+td:nth-child(1):hover {
+    background-color:lightblue;
 }

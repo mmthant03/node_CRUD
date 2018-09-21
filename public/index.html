@@ -10,22 +10,42 @@
 <body>
     <div class="divContainer">
         <form>
-            <input id="id" type="text" readonly="readonly">
-            <input id="name" type="text">
-            <input id="country" type="text">
-            <button id="save">Save</button>
-            <button id="update">Update</button>
+            <h1 style="color:white;">Share Your Favorite Places and Let the other add them to their travel list.</h1>
+            <input id="name" class="inputText" type="text" placeholder="Your Favorite Place!" size="42">
+            <input id="country" class="inputText" type="text" placeholder="Where is it?" size="42">
+            <button id="save" class="buttonText">Save</button>
 
         </form>
     </div>
 
-    <div id="result">
+    <div id="result" class="divleft">
+        <h3>Destination List</h3>
+        <h4>Your added destination will appear below.</h4>
         <table id="places">
-            <th>ID</th>
             <th>Destination</th>
             <th>Country</th>
         </table>
     </div>
+
+    <div class="divright">
+        <h3>Destination Info</h3>
+        <h4>Click on the place name to view its info.</h4>
+        <p id="Destination"></p>
+        <p id="Country"></p>
+        <p id="Abt"></p>
+        <p id="About"></p>
+    </div>
+
+    <div class="divrightmost">
+        <h3>Add your place description or Update your Data!</h3>
+        <h4>Click Edit button to modify.</h4>
+        <div id="modify">
+
+        </div>
+
+    </div>
+
+
 
 </body>
 
@@ -35,22 +55,29 @@
 
     document.getElementById("save").addEventListener("click", function (evt) {
         var destination = {};
-        destination.name = document.getElementById("name").value;
-        destination.country = document.getElementById("country").value;
-        create(destination);
-    })
+        var place = document.getElementById("name").value;
+        var cty = document.getElementById("country").value;
+        if (place == "Your Favorite Place!" || cty == "Where is it?") {
+            alert("You need to enter both type to save data!");
+        }
+        else if (place == "" || cty == "") {
+            alert("You can't leave one type of infomation to save data!");
+        } else {
+            destination.name = place;
+            destination.country = cty;
+            create(destination);
+        }
+        // imgInput = document.getElementById("img");
+        // var img = imgInput.files[0];
+        // var formData = new FormData();
+        // formData.append('file', img);
 
-    document.getElementById("update").addEventListener("click", function (evt) {
-        var destination = {};
-        destination.id = document.getElementById("id").value;
-        destination.name = document.getElementById("name").value;
-        destination.country = document.getElementById("country").value;
-        update(destination);
+        // createImg(formData);
     })
 
     function create(destn) {
         var request = new XMLHttpRequest();
-        request.open('PUT', '/create');
+        request.open('POST', '/create');
         request.responseType = 'text';
         request.onload = function () {
             console.log("Creating Data Done!");
@@ -58,6 +85,12 @@
         }
         request.send(JSON.stringify(destn));
     }
+
+    // function createImg(formData) {
+    //     var request = new XMLHttpRequest();
+    //     request.open('POST', '/upload', true);
+    //     request.send(formData);
+    // }
 
     function read() {
 
@@ -76,19 +109,25 @@
 
         places.map(place => {
             var row = table.insertRow();
-            var idCell = row.insertCell(0);
-            var nameCell = row.insertCell(1);
-            var countryCell = row.insertCell(2);
-            var editCell = row.insertCell(3);
-            var deleteCell = row.insertCell(4);
+            //var idCell = row.insertCell(0);
+            var nameCell = row.insertCell(0);
+            var countryCell = row.insertCell(1);
+            var editCell = row.insertCell(2);
+            var deleteCell = row.insertCell(3);
 
-            idCell.innerHTML = place.id;
+            //idCell.innerHTML = place.id;
+            nameCell.setAttribute("id", place.id);
             nameCell.innerHTML = place.name;
+            nameCell.addEventListener("click", function (evt) {
+                setDescription(place);
+            })
             countryCell.innerHTML = place.country;
 
             var editBtn = document.createElement("BUTTON");
             editBtn.setAttribute("id", "edit_" + place.id);
-            editBtn.setAttribute("onclick", "setText('" + place.id + "')");
+            editBtn.addEventListener("click", function (evt) {
+                buildUpdateForm(place.id);
+            })
             editBtn.innerHTML = "Edit";
             editCell.appendChild(editBtn);
 
@@ -96,21 +135,11 @@
             deleteBtn.setAttribute("id", "delete_" + place.id);
             deleteBtn.addEventListener("click", function (evt) {
                 warn(place.id);
-                // remove(place.id);
             })
             deleteBtn.innerHTML = "Delete";
             deleteCell.appendChild(deleteBtn);
 
         });
-    }
-
-    function setText(id) {
-        var place_current = places.filter(function (d) {
-            return d.id === id;
-        })[0];
-        document.getElementById("id").value = place_current.id;
-        document.getElementById("name").value = place_current.name;
-        document.getElementById("country").value = place_current.country;
     }
 
     function update(destn) {
@@ -149,7 +178,66 @@
         request.send(JSON.stringify(place_current));
     }
 
+    function setDescription(place) {
+        document.getElementById("Destination").innerHTML = "Destination: " + place.name;
+        document.getElementById("Country").innerHTML = "Located in: " + place.country;
+        document.getElementById("Abt").innerHTML = "About: "
+        document.getElementById("About").innerHTML = "      " + place.description;
+    }
 
+    function buildUpdateForm(id) {
+        var place_current = places.filter(function (d) {
+            return d.id === id;
+        })[0];
+
+        var modifyDiv = document.getElementById("modify");
+        while (modifyDiv.firstChild) {
+            modifyDiv.removeChild(modifyDiv.firstChild);
+        }
+        var modifyForm = document.createElement("FORM");
+
+        var updatePlace = document.createElement("INPUT");
+        updatePlace.id = 'updatePlace';
+        updatePlace.setAttribute("class","smallInput");
+        updatePlace.type = 'text';
+        updatePlace.value = place_current.name;
+        modifyForm.appendChild(updatePlace);
+        modifyForm.appendChild(document.createElement("BR"));
+        modifyForm.appendChild(document.createElement("BR"));
+
+        var updateCountry = document.createElement("INPUT");
+        updateCountry.id = 'updateCountry';
+        updateCountry.setAttribute("class","smallInput");
+        updateCountry.type = 'text';
+        updateCountry.value = place_current.country;
+        modifyForm.appendChild(updateCountry);
+        modifyForm.appendChild(document.createElement("BR"));
+        modifyForm.appendChild(document.createElement("BR"));
+
+        var updateAbout = document.createElement("INPUT");
+        updateAbout.id = 'updateAbout';
+        updateAbout.setAttribute("class","smallInput");
+        updateAbout.type = 'text';
+        updateAbout.value = place_current.description;
+        modifyForm.appendChild(updateAbout);
+        modifyForm.appendChild(document.createElement("BR"));
+        modifyForm.appendChild(document.createElement("BR"));
+
+        var update1 = document.createElement("BUTTON");
+        update1.id = 'update1';
+        update1.innerHTML = "Update";
+        update1.addEventListener("click", function (evt) {
+            var destination = {};
+            destination.id = place_current.id;
+            destination.name = document.getElementById("updatePlace").value;
+            destination.country = document.getElementById("updateCountry").value;
+            destination.description = document.getElementById("updateAbout").value;
+            update(destination);
+        })
+        modifyForm.appendChild(update1);
+
+        modifyDiv.appendChild(modifyForm);
+    }
 </script>
 
 </html>

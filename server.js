@@ -34,9 +34,15 @@ var server = http.createServer(function (req, res) {
         case '/bagan.jpg':
             sendFile(res, 'public/css/bagan.jpg');
             break;
+        case '/GrandCanyon.jpg':
+            sendFile(res, 'public/css/GrandCanyon.jpg');
+            break;
         case '/create':
             createData(req, res);
             break;
+        // case '/upload':
+        //     uploadData(req, res);
+        //     break;
         case '/read':
             readData(res);
             break;
@@ -85,10 +91,24 @@ function createData(req, res) {
     }).on('end', () => {
         body = Buffer.concat(body).toString()
         body = JSON.parse(body);
+        console.log(body.img);
         save(body);
         res.end()
     })
 }
+
+// function uploadData(req, res) {
+//     let body = []
+//     req.on('data', (chunk) => {
+//         body.push(chunk)
+//     }).on('end', () => {
+//         //body = Buffer.concat(body).toString()
+//         //body = JSON.parse(body);
+//         console.log(body.img);
+//         //save(body);
+//         res.end();
+//     })
+// }
 
 // save data to database
 async function save(data) {
@@ -131,8 +151,10 @@ async function update(data) {
     let id = data.id;
     let name = data.name;
     let country = data.country;
+    let description = data.description;
 
-    let queryText = "UPDATE public.destination SET name = '" + name + "', country = '" + country + "' WHERE id ='" + id + "';";
+    let queryText = "UPDATE public.destination SET name = '" + name + "', country = '" + country + "', description = '" + description + "' WHERE id ='" + id + "';";
+    console.log(queryText);
     try {
         let data = await pool.query(queryText);
     } catch (err) {
@@ -157,7 +179,6 @@ async function remove(data, res) {
     let queryText = "DELETE FROM public.destination WHERE id = '" + id + "' RETURNING *;";
     try {
         let data = await pool.query(queryText);
-        console.log(JSON.stringify(data.rows));
         res.end(JSON.stringify(data.rows[0]));
     } catch (err) {
         console.log(err);
