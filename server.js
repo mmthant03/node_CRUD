@@ -4,6 +4,7 @@ let http = require('http'),
     port = process.env.PORT || 8080,
     pg = require('pg');
 
+// Database Connection
 const { Pool } = require('pg');
 const connectionUrl = "postgres://ibnjwjnapcjvcr:1d41a1aaa840057cc68cdbd23f0185da6f9da8c4d21ff24a3dfb5cbdcb4dd1fb@ec2-54-83-4-76.compute-1.amazonaws.com:5432/dlhmluld3r1p9";
 
@@ -14,9 +15,7 @@ const pool = new Pool({
 
 pool.connect();
 
-
-
-
+// Connecting to the server
 var server = http.createServer(function (req, res) {
     var uri = url.parse(req.url)
     console.log(req.method + "  " + uri.pathname);
@@ -147,6 +146,7 @@ function updateData(req, res) {
     })
 }
 
+// update data to database
 async function update(data) {
     let id = data.id;
     let name = data.name;
@@ -162,6 +162,7 @@ async function update(data) {
     }
 }
 
+// delete one specific row
 function deleteData(req, res) {
     let body = []
     req.on('data', (chunk) => {
@@ -173,6 +174,7 @@ function deleteData(req, res) {
     })
 }
 
+// delete row from database
 async function remove(data, res) {
     let id = data.id;
 
