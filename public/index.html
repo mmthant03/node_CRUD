@@ -113,9 +113,9 @@
             var nameCell = row.insertCell(0);
             var countryCell = row.insertCell(1);
             var editCell = row.insertCell(2);
+            editCell.style = "text-align: center;"
             var deleteCell = row.insertCell(3);
 
-            //idCell.innerHTML = place.id;
             nameCell.setAttribute("id", place.id);
             nameCell.innerHTML = place.name;
             nameCell.addEventListener("click", function (evt) {
@@ -125,19 +125,12 @@
 
             var editBtn = document.createElement("BUTTON");
             editBtn.setAttribute("id", "edit_" + place.id);
+            editBtn.style = "width: 50px;"
             editBtn.addEventListener("click", function (evt) {
                 buildUpdateForm(place.id);
             })
             editBtn.innerHTML = "Edit";
             editCell.appendChild(editBtn);
-
-            var deleteBtn = document.createElement("BUTTON");
-            deleteBtn.setAttribute("id", "delete_" + place.id);
-            deleteBtn.addEventListener("click", function (evt) {
-                warn(place.id);
-            })
-            deleteBtn.innerHTML = "Delete";
-            deleteCell.appendChild(deleteBtn);
 
         });
     }
@@ -214,27 +207,48 @@
         modifyForm.appendChild(document.createElement("BR"));
         modifyForm.appendChild(document.createElement("BR"));
 
-        var updateAbout = document.createElement("INPUT");
-        updateAbout.id = 'updateAbout';
-        updateAbout.setAttribute("class","smallInput");
-        updateAbout.type = 'text';
-        updateAbout.value = place_current.description;
-        modifyForm.appendChild(updateAbout);
+        // var updateAbout = document.createElement("INPUT");
+        // updateAbout.id = 'updateAbout';
+        // updateAbout.setAttribute("class","smallInput");
+        // updateAbout.type = 'text';
+        // updateAbout.value = place_current.description;
+        // modifyForm.appendChild(updateAbout);
+        // modifyForm.appendChild(document.createElement("BR"));
+        // modifyForm.appendChild(document.createElement("BR"));
+
+        var updateDesc = document.createElement("TEXTAREA");
+        updateDesc.id = "updateDesc";
+        updateDesc.setAttribute("class", "smallInput");
+        updateDesc.rows = "10";
+        updateDesc.cols = "60";
+        updateDesc.value = place_current.description;
+        modifyForm.appendChild(updateDesc);
         modifyForm.appendChild(document.createElement("BR"));
         modifyForm.appendChild(document.createElement("BR"));
 
         var update1 = document.createElement("BUTTON");
         update1.id = 'update1';
+        update1.setAttribute("class", "smallInput");
         update1.innerHTML = "Update";
         update1.addEventListener("click", function (evt) {
             var destination = {};
             destination.id = place_current.id;
             destination.name = document.getElementById("updatePlace").value;
             destination.country = document.getElementById("updateCountry").value;
-            destination.description = document.getElementById("updateAbout").value;
+            //destination.description = document.getElementById("updateAbout").value;
+            destination.description = document.getElementById("updateDesc").value;
             update(destination);
         })
         modifyForm.appendChild(update1);
+
+        var delete1 = document.createElement("BUTTON");
+        delete1.setAttribute("class", "smallInput");
+        delete1.addEventListener("click", function(evt) {
+            warn(place_current.id);
+        })
+        delete1.innerHTML = "Delete";
+        modifyForm.appendChild(delete1);
+        
 
         modifyDiv.appendChild(modifyForm);
     }
